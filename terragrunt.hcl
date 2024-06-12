@@ -58,7 +58,9 @@ catalog {
     "https://github.com/gruntwork-io/terraform-kubernetes-namespace",
     "terraform-aws-modules/vpc/aws",
     "terraform-aws-modules/vpc/aws//modules/vpc-endpoints"
+  ]
 }
+
 
 # ---------------------------------------------------------------------------------------------------------------------
 # GLOBAL PARAMETERS
