@@ -69,6 +69,18 @@ terraform {
     execute      = ["echo", "Running Terraform"]
   }
 
+  before_hook "checkov" {
+    commands = ["plan"]
+    execute = [
+      "checkov",
+      "-d",
+      ".",
+      "--quiet",
+      "--framework",
+      "terraform",
+    ]
+  }
+
   // The file path is resolved relative to the module directory when --chdir or --recursive is used. 
   // To use a config file from the working directory when recursing, pass an absolute path:
   after_hook "validate_tflint" {
