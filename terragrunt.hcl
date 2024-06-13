@@ -39,7 +39,7 @@ remote_state {
   backend = "s3"
   config = {
     encrypt        = true
-    bucket         = "${get_env("TG_BUCKET_PREFIX", "")}terragrunt-example-tf-state-${local.account_name}-${local.aws_region}"
+    bucket         = "${get_env("TG_BUCKET_PREFIX", "")}-terragrunt-tf-state-${local.account_name}-${local.aws_region}"
     key            = "${path_relative_to_include()}/tf.tfstate"
     region         = local.aws_region
     dynamodb_table = "tf-locks"
@@ -60,6 +60,21 @@ catalog {
     "terraform-aws-modules/vpc/aws//modules/vpc-endpoints"
   ]
 }
+
+
+terraform {
+  before_hook "before_hook" {
+    commands     = ["apply", "plan"]
+    execute      = ["echo", "Running Terraform"]
+  }
+
+  after_hook "after_hook" {
+    commands     = ["apply", "plan"]
+    execute      = ["echo", "Finished running Terraform"]
+    run_on_error = true
+  }
+}
+
 
 
 # ---------------------------------------------------------------------------------------------------------------------
