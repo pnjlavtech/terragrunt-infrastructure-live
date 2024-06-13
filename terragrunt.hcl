@@ -35,6 +35,7 @@ EOF
 }
 
 # Configure Terragrunt to automatically store tfstate files in an S3 bucket
+# Remember to set the OS env var value of TG_BUCKET_PREFIX
 remote_state {
   backend = "s3"
   config = {
@@ -66,6 +67,21 @@ terraform {
   before_hook "before_hook" {
     commands     = ["apply", "plan"]
     execute      = ["echo", "Running Terraform"]
+    // execute      = ["tflint"]
+  }
+
+  after_hook "validate_tflint" {
+    commands = ["validate"]
+    execute = [
+      "sh", "-c", <<EOT
+        echo "Run tflint for project '${path_relative_to_include()}'..."
+        export TFLINT_LOG="tflintlog"
+        (tflint --config=./.tflint.hcl -f default)
+        error_code=$?
+        echo "Run tflint for project '${path_relative_to_include()}'...DONE\n"
+        exit $error_code
+      EOT
+    ]
   }
 
   after_hook "after_hook" {
