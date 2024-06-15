@@ -2,17 +2,15 @@
 
 # Example infrastructure-live for Terragrunt
 
-This repo, along with the [terragrunt-infrastructure-modules-example
-repo](https://github.com/pnjlavtech/terragrunt-infrastructure-modules), show an example file/folder structure
-you can use with [Terragrunt](https://github.com/gruntwork-io/terragrunt) to keep your
-[Terraform](https://www.terraform.io) and [OpenTofu](https://opentofu.org/) code DRY. For background information, 
+This repo, along with the [terragrunt-infrastructure-modules](https://github.com/pnjlavtech/terragrunt-infrastructure-modules), show an example file/folder structure you can use with [Terragrunt](https://github.com/gruntwork-io/terragrunt) to keep your
+[Terraform](https://www.terraform.io) code DRY. For background information, 
 check out the [Keep your code DRY](https://github.com/gruntwork-io/terragrunt#keep-your-terraform-code-dry) 
 section of the Terragrunt documentation.
 
-This repo shows an example of how to use the modules from the `terragrunt-infrastructure-modules-example` repo to
-deploy an Auto Scaling Group (ASG) and a MySQL DB across three environments (qa, stage, prod) and two AWS accounts
+This repo shows an example of how to use the modules from the `terragrunt-infrastructure-modules` repo to
+deploy infra (vpc, eks, iam and argocd) across three environments (qa, stage, prod) and two AWS accounts
 (non-prod, prod), all with minimal duplication of code. That's because there is just a single copy of
-the code, defined in the `terragrunt-infrastructure-modules-example` repo, and in this repo, we solely define
+the code, defined in the `terragrunt-infrastructure-modules` repo, and in this repo, we solely define
 `terragrunt.hcl` files that reference that code (at a specific version, too!) and fill in variables specific to each
 environment.
 
@@ -31,7 +29,7 @@ you are interested in battle-tested, production-ready Terraform code, check out 
 
 ### Pre-requisites
 
-1. Install [OpenTofu](https://opentofu.org/) version `1.6.0` or newer and
+1. Install [Terraform](https://www.terraform.io) version `1.5.3` or newer and
    [Terragrunt](https://github.com/gruntwork-io/terragrunt) version `v0.52.0` or newer.
 2. Update the `bucket` parameter in the root `terragrunt.hcl`. We use S3 [as a Terraform
    backend](https://opentofu.org/docs/language/settings/backends/s3/) to store your
@@ -45,18 +43,17 @@ you are interested in battle-tested, production-ready Terraform code, check out 
    mechanisms](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html).
 
 
+
 ### Deploying a single module
 
-1. `cd` into the module's folder (e.g. `cd non-prod/us-east-1/qa/mysql`).
-1. Note: if you're deploying the MySQL DB, you'll need to configure your DB password as an environment variable:
-   `export TF_VAR_master_password=(...)`.
+1. `cd` into the module's folder (e.g. `cd non-prod/us-west-2/qa/vpc`).
 1. Run `terragrunt plan` to see the changes you're about to apply.
 1. If the plan looks good, run `terragrunt apply`.
 
 
 ### Deploying all modules in a region
 
-1. `cd` into the region folder (e.g. `cd non-prod/us-east-1`).
+1. `cd` into the region folder (e.g. `cd non-prod/us-west-2`).
 1. Configure the password for the MySQL DB as an environment variable: `export TF_VAR_master_password=(...)`.
 1. Run `terragrunt run-all plan` to see all the changes you're about to apply.
 1. If the plan looks good, run `terragrunt run-all apply`.
